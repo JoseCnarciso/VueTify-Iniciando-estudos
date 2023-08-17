@@ -15,7 +15,22 @@
       v-model="email"></v-text-field>
 
     <v-btn variant="tonal" color="green" type="submit">Cadastrar</v-btn>
+
+    <v-snackbar v-model="snackbar" :timeout="timeout">
+      {{ text }}
+
+      <template v-slot:actions>
+        <v-btn color="red" variant="text" @click="snackbar = false">
+          Fechar
+        </v-btn>
+      </template>
+    </v-snackbar>
+
+    <v-select clearable label="Escolher" :items="['Batata', 'Ovo', 'Farinha', 'Oleo', 'Beringela', 'Wyoming']"
+      variant="solo-inverted"></v-select>
   </v-form>
+
+
 
   <v-container class="bg-surface-variant">
     <v-row no-gutters>
@@ -36,6 +51,11 @@
 export default {
   data() {
     return {
+      snackbar: () => ({
+        snackbar: false,
+        timeout: 2000,
+        text: `Hello, I'm a snackbar`,
+      }),
       email: '',
       nome: '',
       nomes: [
@@ -46,7 +66,8 @@ export default {
         'https://http.cat/images/417.jpg',
         'https://http.cat/images/498.jpg',
         'https://http.cat/images/500.jpg'
-      ]
+      ],
+      estadosList: ['']
     }
   },
   methods: {
@@ -54,9 +75,12 @@ export default {
       const { valid } = await this.$refs.form.validate()
 
       if (valid) {
-        alert('Chamou o submit')
-      }
+        this.text = 'Usuário cadastrado com sucesso!'
 
+        this.snackbar = true
+        //Limpar os campos
+        this.$refs.form.reset()
+      }
     }
   }
 }
